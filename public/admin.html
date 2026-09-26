@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DreamAnime Admin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080808;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px 7%;
+            border-bottom: 1px solid #222;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff1744;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 70px auto;
+            padding: 35px;
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 12px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #999;
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            background: #191919;
+            color: white;
+            border: 1px solid #333;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #ff1744;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 7px;
+            background: #ff1744;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e60032;
+        }
+
+        #loginBox,
+        #uploadBox {
+            display: none;
+        }
+
+        #loginBox {
+            display: block;
+        }
+
+        #status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .logout {
+            margin-top: 15px;
+            background: #222;
+        }
+
+        .logout:hover {
+            background: #333;
+        }
+
+        .back {
+            display: block;
+            margin-top: 25px;
+            color: #aaa;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .back:hover {
+            color: white;
+        }
+
+        .file-box {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Dream<span>Anime</span>
+    </div>
+</header>
+
+<div class="container">
+
+    <!-- LOGIN -->
+
+    <div id="loginBox">
+
+        <h1>Admin Login</h1>
+
+        <p class="subtitle">
+            Login to manage DreamAnime.
+        </p>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="Username"
+            autocomplete="username"
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            autocomplete="current-password"
+        >
+
+        <button onclick="login()">
+            Login
+        </button>
+
+    </div>
+
+
+    <!-- UPLOAD -->
+
+    <div id="uploadBox">
+
+        <h1>Upload DreamAnime APK</h1>
+
+        <p class="subtitle">
+            Upload the latest APK for public download.
+        </p>
+
+        <div class="file-box">
+
+            <input
+                type="file"
+                id="apkFile"
+                accept=".apk"
+            >
+
+        </div>
+
+        <button onclick="uploadAPK()">
+            Upload APK
+        </button>
+
+        <button
+            class="logout"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+    <div id="status"></div>
+
+    <a class="back" href="/">
+        ← Back to DreamAnime
+    </a>
+
+</div>
+
+
+<script>
+
+function showStatus(message, success) {
+
+    const status = document.getElementById("status");
+
+    status.style.display = "block";
+    status.textContent = message;
+
+    if (success) {
+        status.style.background = "#123d20";
+        status.style.color = "#7cff9b";
+    } else {
+        status.style.background = "#3d1212";
+        status.style.color = "#ff8585";
+    }
+}
+
+
+// LOGIN
+
+async function login() {
+
+    const username =
+        document.getElementById("username").value.trim();
+
+    const password =
+        document.getElementById("password").value;
+
+    if (!username || !password) {
+
+        showStatus(
+            "Username aur password enter karo.",
+            false
+        );
+
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "/api/admin-login",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+
+            sessionStorage.setItem(
+                "dreamanime_admin",
+                "true"
+            );
+
+            document.getElementById(
+                "loginBox"
+            ).style.display = "none";
+
+            document.getElementById(
+                "uploadBox"
+            ).style.display = "block";
+
+            document.getElementById(
+                "status"
+            ).style.display = "none";
+
+        } else {
+
+            showStatus(
+                "❌ Invalid username or password.",
+                false
+            );
+        }
+
+    } catch (error) {
+
+        showStatus(
+            "❌ Server se connection nahi ho raha.",
+            false
+        );
+    }
+}
+
+
+// UPLOAD
+
+async function uploadAPK() {
+
+    if (
+        sessionStorage.getItem(
+            "dreamanime_admin"
+        ) !== "true"
+    ) {
+
+        showStatus(
+            "Please login first.",
+            false
+        );
+
+        return;
+    }
+
+    const fileInput =
+        document.getElementById("apkFile");
+
+    if (!fileInput.files.length) {
+
+        showStatus(
+            "APK file select karo.",
+            false
+        );
+
+        return;
+    }
+
+    const file = fileInput.files[0];
+
+    if (
+        !file.name
+            .toLowerCase()
+            .endsWith(".apk")
+    ) {
+
+        showStatus(
+            "Only APK files allowed hain.",
+            false
+        );
+
+        return;
+    }
+
+    const formData = new FormData();
+
+    formData.append(
+        "apk",
+        file
+    );
+
+    showStatus(
+        "Uploading APK...",
+        true
+    );
+
+    try {
+
+        const response = await fetch(
+            "/api/upload-apk",
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const data =
+            await response.json();
+
+        if (data.success) {
+
+            showStatus(
+                "✅ DreamAnime APK successfully uploaded!",
+                true
+            );
+
+            fileInput.value = "";
+
+        } else {
+
+            showStatus(
+                "❌ " + data.message,
+                false
+            );
+        }
+
+    } catch (error) {
+
+        showStatus(
+            "❌ Upload failed.",
+            false
+        );
+    }
+}
+
+
+// LOGOUT
+
+function logout() {
+
+    sessionStorage.removeItem(
+        "dreamanime_admin"
+    );
+
+    document.getElementById(
+        "uploadBox"
+    ).style.display = "none";
+
+    document.getElementById(
+        "loginBox"
+    ).style.display = "block";
+
+    document.getElementById(
+        "username"
+    ).value = "";
+
+    document.getElementById(
+        "password"
+    ).value = "";
+
+    document.getElementById(
+        "status"
+    ).style.display = "none";
+}
+
+
+// CHECK LOGIN
+
+window.onload = function() {
+
+    if (
+        sessionStorage.getItem(
+            "dreamanime_admin"
+        ) === "true"
+    ) {
+
+        document.getElementById(
+            "loginBox"
+        ).style.display = "none";
+
+        document.getElementById(
+            "uploadBox"
+        ).style.display = "block";
+    }
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DreamAnime - Anime Streaming App</title>
+
+    <meta name="description"
+          content="Download DreamAnime and enjoy your anime experience.">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #080808;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222;
+            background: #0b0b0b;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ff1744;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            color: #ff1744;
+        }
+
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 20px;
+            background:
+                radial-gradient(circle at center, #35101b 0%, #080808 55%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 8vw, 90px);
+            margin-bottom: 15px;
+        }
+
+        .hero h1 span {
+            color: #ff1744;
+        }
+
+        .hero p {
+            color: #bdbdbd;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 16px 35px;
+            background: #ff1744;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 17px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            background: #e60032;
+        }
+
+        .info {
+            padding: 50px 7%;
+            text-align: center;
+        }
+
+        .info h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .info p {
+            color: #aaa;
+            max-width: 650px;
+            margin: auto;
+            line-height: 1.7;
+        }
+
+        .version {
+            margin: 25px auto;
+            padding: 15px 20px;
+            max-width: 350px;
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 8px;
+            color: #ccc;
+        }
+
+        footer {
+            border-top: 1px solid #222;
+            padding: 25px;
+            text-align: center;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 18px 20px;
+            }
+
+            nav a {
+                margin-left: 12px;
+                font-size: 13px;
+            }
+
+            .hero {
+                min-height: 70vh;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        Dream<span>Anime</span>
+    </div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/admin.html">Admin</a>
+    </nav>
+</header>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>
+            Dream<span>Anime</span>
+        </h1>
+
+        <p>
+            Your anime experience starts here.
+            Download the DreamAnime Android app and enjoy
+            your anime world.
+        </p>
+
+        <a class="download-btn" href="/download">
+            ⬇ Download DreamAnime APK
+        </a>
+
+    </div>
+
+</section>
+
+<section class="info">
+
+    <h2>DreamAnime Android App</h2>
+
+    <p>
+        Get the latest DreamAnime Android application
+        directly from the official DreamAnime website.
+    </p>
+
+    <div class="version">
+        Latest Version: <strong>1.0</strong>
+    </div>
+
+</section>
+
+<footer>
+    © 2026 DreamAnime. All rights reserved.
+</footer>
+
+</body>
+</html>
