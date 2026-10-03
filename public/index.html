@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,209 +8,1113 @@
     <title>DreamAnime - Anime Streaming App</title>
 
     <meta name="description"
-          content="Download DreamAnime and enjoy your anime experience.">
+          content="Download DreamAnime and enter your anime world.">
 
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            background: #080808;
-            color: white;
-            min-height: 100vh;
+        html {
+            scroll-behavior: smooth;
         }
 
-        header {
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050505;
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =========================================
+           BACKGROUND VIDEO
+        ========================================= */
+
+        .video-background {
+            position: fixed;
+            inset: 0;
             width: 100%;
-            padding: 20px 7%;
+            height: 100%;
+            z-index: -10;
+            overflow: hidden;
+            background: #050505;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.48) saturate(1.15);
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.72),
+                    rgba(0, 0, 0, 0.30) 35%,
+                    rgba(0, 0, 0, 0.78) 100%
+                );
+
+            pointer-events: none;
+        }
+
+        .red-glow {
+            position: absolute;
+            width: 550px;
+            height: 550px;
+            left: 50%;
+            top: 42%;
+            transform: translate(-50%, -50%);
+
+            background: radial-gradient(
+                circle,
+                rgba(255, 23, 68, 0.22),
+                transparent 68%
+            );
+
+            filter: blur(20px);
+            pointer-events: none;
+        }
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 78px;
+
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #222;
-            background: #0b0b0b;
+            justify-content: space-between;
+
+            padding: 0 7%;
+
+            background: rgba(5, 5, 5, 0.58);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+            z-index: 100;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 29px;
+            font-weight: 900;
+            letter-spacing: -1px;
+
+            text-shadow:
+                0 0 15px rgba(255, 23, 68, 0.35);
         }
 
         .logo span {
             color: #ff1744;
         }
 
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+        }
+
         nav a {
-            color: white;
+            color: #eeeeee;
             text-decoration: none;
-            margin-left: 25px;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 600;
+
+            transition: 0.25s ease;
         }
 
         nav a:hover {
             color: #ff1744;
         }
 
+        .admin-link {
+            padding: 9px 17px;
+            border: 1px solid rgba(255, 23, 68, 0.65);
+            border-radius: 20px;
+
+            background: rgba(255, 23, 68, 0.08);
+        }
+
+        .admin-link:hover {
+            background: #ff1744;
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.35);
+        }
+
+        /* =========================================
+           SOUND BUTTON
+        ========================================= */
+
+        .sound-btn {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+
+            width: 48px;
+            height: 48px;
+
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+
+            background: rgba(0, 0, 0, 0.60);
+            color: white;
+
+            font-size: 20px;
+            cursor: pointer;
+
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+
+            z-index: 200;
+
+            transition: 0.25s ease;
+        }
+
+        .sound-btn:hover {
+            transform: scale(1.08);
+            background: #ff1744;
+            border-color: #ff1744;
+            box-shadow: 0 0 25px rgba(255, 23, 68, 0.4);
+        }
+
+        /* =========================================
+           HERO
+        ========================================= */
+
         .hero {
-            min-height: 75vh;
+            min-height: 92vh;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             text-align: center;
-            padding: 60px 20px;
-            background:
-                radial-gradient(circle at center, #35101b 0%, #080808 55%);
+
+            padding: 130px 20px 80px;
+
+            position: relative;
         }
 
         .hero-content {
-            max-width: 800px;
+            width: 100%;
+            max-width: 900px;
+
+            animation: heroEnter 1.1s ease forwards;
+        }
+
+        @keyframes heroEnter {
+
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 15px;
+
+            border: 1px solid rgba(255, 23, 68, 0.45);
+            border-radius: 30px;
+
+            background: rgba(255, 23, 68, 0.09);
+
+            color: #ff8da3;
+
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 0 25px rgba(255, 23, 68, 0.08);
+        }
+
+        .badge-dot {
+            width: 7px;
+            height: 7px;
+
+            border-radius: 50%;
+            background: #ff1744;
+
+            box-shadow:
+                0 0 12px #ff1744;
+
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.45;
+                transform: scale(0.75);
+            }
         }
 
         .hero h1 {
-            font-size: clamp(45px, 8vw, 90px);
-            margin-bottom: 15px;
+            font-size: clamp(55px, 10vw, 115px);
+
+            line-height: 0.95;
+
+            font-weight: 900;
+
+            letter-spacing: -5px;
+
+            margin-bottom: 28px;
+
+            text-shadow:
+                0 5px 30px rgba(0, 0, 0, 0.7);
         }
 
         .hero h1 span {
             color: #ff1744;
+
+            text-shadow:
+                0 0 35px rgba(255, 23, 68, 0.35);
         }
 
         .hero p {
-            color: #bdbdbd;
+            max-width: 700px;
+            margin: auto;
+
+            color: #d0d0d0;
+
             font-size: 18px;
-            line-height: 1.7;
+            line-height: 1.8;
+
+            text-shadow:
+                0 2px 10px rgba(0, 0, 0, 0.9);
+
             margin-bottom: 35px;
         }
 
+        /* =========================================
+           DOWNLOAD BUTTON
+        ========================================= */
+
         .download-btn {
-            display: inline-block;
-            padding: 16px 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            min-width: 220px;
+
+            padding: 16px 28px;
+
             background: #ff1744;
             color: white;
+
             text-decoration: none;
-            border-radius: 8px;
-            font-size: 17px;
-            font-weight: bold;
-            transition: 0.2s;
+
+            border-radius: 9px;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            box-shadow:
+                0 12px 35px rgba(255, 23, 68, 0.28);
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                box-shadow 0.25s ease;
         }
 
         .download-btn:hover {
-            transform: translateY(-2px);
-            background: #e60032;
+            transform: translateY(-4px);
+
+            background: #ff3158;
+
+            box-shadow:
+                0 17px 45px rgba(255, 23, 68, 0.42);
         }
 
+        .download-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* =========================================
+           APP INFO
+        ========================================= */
+
         .info {
-            padding: 50px 7%;
+            position: relative;
+
+            padding: 90px 20px 100px;
+
             text-align: center;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(4, 4, 4, 0.40),
+                    rgba(4, 4, 4, 0.94)
+                );
+        }
+
+        .info-card {
+            max-width: 850px;
+            margin: auto;
+
+            padding: 45px 30px;
+
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 20px;
+
+            background: rgba(10, 10, 10, 0.72);
+
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.4);
         }
 
         .info h2 {
-            font-size: 32px;
+            font-size: clamp(30px, 5vw, 45px);
             margin-bottom: 15px;
+
+            font-weight: 900;
         }
 
-        .info p {
+        .info h2 span {
+            color: #ff1744;
+        }
+
+        .info-description {
             color: #aaa;
+
             max-width: 650px;
             margin: auto;
-            line-height: 1.7;
+
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* =========================================
+           VERSION CARD
+        ========================================= */
+
+        .version-card {
+            max-width: 460px;
+
+            margin: 32px auto 0;
+
+            padding: 20px;
+
+            border-radius: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 23, 68, 0.10),
+                    rgba(255, 255, 255, 0.035)
+                );
+
+            border: 1px solid rgba(255, 23, 68, 0.20);
+
+            text-align: left;
+        }
+
+        .version-label {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
         }
 
         .version {
-            margin: 25px auto;
-            padding: 15px 20px;
-            max-width: 350px;
-            background: #111;
-            border: 1px solid #292929;
-            border-radius: 8px;
-            color: #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 15px;
         }
 
-        footer {
-            border-top: 1px solid #222;
-            padding: 25px;
-            text-align: center;
-            color: #777;
+        .version-name {
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .version-number {
+            color: #ff1744;
+        }
+
+        .version-status {
+            color: #7cff9b;
+            font-size: 12px;
+            font-weight: bold;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            background: rgba(124, 255, 155, 0.08);
+            border: 1px solid rgba(124, 255, 155, 0.15);
+        }
+
+        /* =========================================
+           FEATURES
+        ========================================= */
+
+        .features {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, minmax(0, 1fr));
+
+            gap: 18px;
+
+            max-width: 850px;
+
+            margin: 30px auto 0;
+        }
+
+        .feature {
+            padding: 25px 18px;
+
+            border-radius: 14px;
+
+            background: rgba(255, 255, 255, 0.035);
+
+            border: 1px solid rgba(255, 255, 255, 0.07);
+
+            transition: 0.25s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(255, 23, 68, 0.30);
+
+            background:
+                rgba(255, 23, 68, 0.055);
+        }
+
+        .feature-icon {
+            font-size: 27px;
+            margin-bottom: 10px;
+        }
+
+        .feature h3 {
+            font-size: 15px;
+            margin-bottom: 7px;
+        }
+
+        .feature p {
+            color: #888;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* =========================================
+           LOADING
+        ========================================= */
+
+        .loading {
+            color: #999;
             font-size: 14px;
         }
 
-        @media (max-width: 600px) {
+        .error-version {
+            color: #ff8585;
+        }
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        footer {
+            position: relative;
+
+            border-top:
+                1px solid rgba(255, 255, 255, 0.08);
+
+            padding: 28px 20px;
+
+            text-align: center;
+
+            background: rgba(3, 3, 3, 0.96);
+
+            color: #666;
+
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: #aaa;
+        }
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
             header {
-                padding: 18px 20px;
+                height: 68px;
+                padding: 0 20px;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            nav {
+                gap: 14px;
             }
 
             nav a {
-                margin-left: 12px;
-                font-size: 13px;
+                font-size: 12px;
+            }
+
+            .admin-link {
+                padding: 8px 12px;
             }
 
             .hero {
-                min-height: 70vh;
+                min-height: 88vh;
+                padding: 110px 20px 70px;
+            }
+
+            .hero h1 {
+                font-size: clamp(52px, 17vw, 82px);
+                letter-spacing: -3px;
             }
 
             .hero p {
-                font-size: 16px;
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .download-btn {
+                width: 100%;
+                max-width: 310px;
+            }
+
+            .info {
+                padding: 65px 15px 75px;
+            }
+
+            .info-card {
+                padding: 35px 18px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .version {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .sound-btn {
+                right: 18px;
+                bottom: 18px;
             }
         }
+
     </style>
+
 </head>
 
 <body>
 
+
+<!-- =========================================
+     HOME WALLPAPER VIDEO
+========================================= -->
+
+<div class="video-background">
+
+    <video
+        id="wallpaper"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+    >
+
+        <source
+            src="/videos/home_wallpaper.mp4"
+            type="video/mp4"
+        >
+
+        Your browser does not support video.
+
+    </video>
+
+    <div class="video-overlay"></div>
+
+    <div class="red-glow"></div>
+
+</div>
+
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
 <header>
+
     <div class="logo">
         Dream<span>Anime</span>
     </div>
 
     <nav>
-        <a href="/">Home</a>
-        <a href="/admin.html">Admin</a>
+
+        <a href="/">
+            Home
+        </a>
+
+        <a
+            class="admin-link"
+            href="/admin.html"
+        >
+            Admin
+        </a>
+
     </nav>
+
 </header>
+
+
+<!-- =========================================
+     SOUND BUTTON
+========================================= -->
+
+<button
+    class="sound-btn"
+    id="soundButton"
+    onclick="toggleSound()"
+    title="Turn sound on/off"
+>
+    🔇
+</button>
+
+
+<!-- =========================================
+     HERO
+========================================= -->
 
 <section class="hero">
 
     <div class="hero-content">
 
+        <div class="badge">
+
+            <span class="badge-dot"></span>
+
+            DREAMANIME ANDROID APP
+
+        </div>
+
+
         <h1>
             Dream<span>Anime</span>
         </h1>
 
+
         <p>
+
             Your anime experience starts here.
-            Download the DreamAnime Android app and enjoy
-            your anime world.
+
+            Discover your anime world with
+            DreamAnime and enjoy the journey
+            wherever you go.
+
         </p>
 
-        <a class="download-btn" href="/download">
-            ⬇ Download DreamAnime APK
+
+        <a
+            class="download-btn"
+            id="heroDownload"
+            href="/download"
+        >
+
+            <span>⬇</span>
+
+            <span id="heroDownloadText">
+                Download DreamAnime
+            </span>
+
         </a>
 
     </div>
 
 </section>
 
+
+<!-- =========================================
+     APP INFORMATION
+========================================= -->
+
 <section class="info">
 
-    <h2>DreamAnime Android App</h2>
+    <div class="info-card">
 
-    <p>
-        Get the latest DreamAnime Android application
-        directly from the official DreamAnime website.
-    </p>
+        <h2>
+            Dream<span>Anime</span> Android App
+        </h2>
 
-    <div class="version">
-        Latest Version: <strong>1.0</strong>
+
+        <p class="info-description">
+
+            Get the latest DreamAnime Android
+            application directly from the official
+            DreamAnime website.
+
+            Download the newest version and
+            enter your anime world.
+
+        </p>
+
+
+        <!-- VERSION -->
+
+        <div class="version-card">
+
+            <div class="version-label">
+                Latest Release
+            </div>
+
+
+            <div class="version">
+
+                <div
+                    class="version-name"
+                    id="versionName"
+                >
+                    <span class="loading">
+                        Checking latest version...
+                    </span>
+                </div>
+
+
+                <div
+                    class="version-status"
+                    id="versionStatus"
+                >
+                    CHECKING
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FEATURES -->
+
+        <div class="features">
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    🎬
+                </div>
+
+                <h3>
+                    Anime World
+                </h3>
+
+                <p>
+                    Your anime experience
+                    in one place.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>
+                    Latest Updates
+                </h3>
+
+                <p>
+                    Website automatically
+                    shows the latest APK.
+                </p>
+
+            </div>
+
+
+            <div class="feature">
+
+                <div class="feature-icon">
+                    📱
+                </div>
+
+                <h3>
+                    Android App
+                </h3>
+
+                <p>
+                    Download and enjoy
+                    DreamAnime on Android.
+                </p>
+
+            </div>
+
+
+        </div>
+
     </div>
 
 </section>
 
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
 <footer>
-    © 2026 DreamAnime. All rights reserved.
+
+    © 2026 <strong>DreamAnime</strong>.
+    All rights reserved.
+
 </footer>
 
+
+<script>
+
+    /* =========================================
+       WALLPAPER
+    ========================================= */
+
+    const wallpaper =
+        document.getElementById("wallpaper");
+
+    const soundButton =
+        document.getElementById("soundButton");
+
+
+    let soundEnabled = false;
+
+
+    /* =========================================
+       SOUND TOGGLE
+    ========================================= */
+
+    function toggleSound() {
+
+        if (!wallpaper) {
+            return;
+        }
+
+
+        if (wallpaper.muted) {
+
+            wallpaper.muted = false;
+
+            soundEnabled = true;
+
+            soundButton.textContent = "🔊";
+
+            wallpaper.play().catch(() => {
+
+                soundEnabled = false;
+
+                wallpaper.muted = true;
+
+                soundButton.textContent = "🔇";
+
+            });
+
+        } else {
+
+            wallpaper.muted = true;
+
+            soundEnabled = false;
+
+            soundButton.textContent = "🔇";
+
+        }
+
+    }
+
+
+    /* =========================================
+       START VIDEO
+    ========================================= */
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            wallpaper.play().catch(() => {
+
+                console.log(
+                    "Autoplay waiting for browser permission."
+                );
+
+            });
+
+        }
+    );
+
+
+    /* =========================================
+       LATEST APK
+    ========================================= */
+
+    async function loadLatestAPK() {
+
+        const versionName =
+            document.getElementById(
+                "versionName"
+            );
+
+        const versionStatus =
+            document.getElementById(
+                "versionStatus"
+            );
+
+        const heroDownloadText =
+            document.getElementById(
+                "heroDownloadText"
+            );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/latest-apk",
+                    {
+                        cache: "no-store"
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Latest APK not available"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (
+                !data.success ||
+                !data.version
+            ) {
+
+                throw new Error(
+                    "Invalid APK information"
+                );
+
+            }
+
+
+            versionName.innerHTML =
+                `Version <span class="version-number">${escapeHTML(data.version)}</span>`;
+
+
+            versionStatus.textContent =
+                "LATEST";
+
+
+            heroDownloadText.textContent =
+                `Download Version ${data.version}`;
+
+
+        } catch (error) {
+
+            console.error(
+                "Latest APK error:",
+                error
+            );
+
+
+            versionName.innerHTML =
+                `<span class="error-version">
+                    Latest version unavailable
+                </span>`;
+
+
+            versionStatus.textContent =
+                "UNAVAILABLE";
+
+
+            heroDownloadText.textContent =
+                "Download DreamAnime";
+
+        }
+
+    }
+
+
+    /* =========================================
+       SECURITY
+    ========================================= */
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =========================================
+       LOAD
+    ========================================= */
+
+    loadLatestAPK();
+
+</script>
+
+
 </body>
+
 </html>
